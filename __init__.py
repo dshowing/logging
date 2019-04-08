@@ -771,6 +771,7 @@ def _addHandlerRef(handler):
     finally:
         _releaseLock()
 
+# 处理程序
 class Handler(Filterer):
     """
     Handler instances dispatch logging events to specific destinations.
@@ -1018,7 +1019,6 @@ class StreamHandler(Handler):
             name += ' '
         return '<%s %s(%s)>' % (self.__class__.__name__, name, level)
 
-
 class FileHandler(StreamHandler):
     """
     A handler class which writes formatted logging records to disk files.
@@ -1086,7 +1086,6 @@ class FileHandler(StreamHandler):
     def __repr__(self):
         level = getLevelName(self.level)
         return '<%s %s (%s)>' % (self.__class__.__name__, self.baseFilename, level)
-
 
 class _StderrHandler(StreamHandler):
     """
@@ -1583,7 +1582,6 @@ class Logger(Filterer):
     def __repr__(self):
         level = getLevelName(self.getEffectiveLevel())
         return '<%s %s (%s)>' % (self.__class__.__name__, self.name, level)
-
 
 class RootLogger(Logger):
     """

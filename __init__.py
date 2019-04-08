@@ -689,6 +689,7 @@ class Filter(object):
             return False
         return (record.name[self.nlen] == ".")
 
+# Logger类继承了Filterer类，关于过滤器的代码都在这里
 class Filterer(object):
     """
     A base class for loggers and handlers which allows them to share
@@ -700,6 +701,7 @@ class Filterer(object):
         """
         self.filters = []
 
+    # 添加一个过滤器
     def addFilter(self, filter):
         """
         Add the specified filter to this handler.
@@ -707,6 +709,7 @@ class Filterer(object):
         if not (filter in self.filters):
             self.filters.append(filter)
 
+    # 移除一个多滤器
     def removeFilter(self, filter):
         """
         Remove the specified filter from this handler.
@@ -833,6 +836,7 @@ class Handler(Filterer):
         if self.lock:
             self.lock.release()
 
+    # 设置将会处理的最低消息级别
     def setLevel(self, level):
         """
         Set the logging level of this handler.  level must be an int or a str.
@@ -880,6 +884,7 @@ class Handler(Filterer):
                 self.release()
         return rv
 
+    # 设置一个格式器对象
     def setFormatter(self, fmt):
         """
         Set the formatter for this handler.
@@ -970,6 +975,7 @@ class StreamHandler(Handler):
 
     terminator = '\n'
 
+    # 如果没有特殊配置，默认输出到控制台
     def __init__(self, stream=None):
         """
         Initialize the handler.
@@ -992,7 +998,7 @@ class StreamHandler(Handler):
         finally:
             self.release()
 
-    def emit(self, record):
+    def emit(self, record):  # 发出
         """
         Emit a record.
 
@@ -1260,7 +1266,7 @@ class Manager(object):
 #---------------------------------------------------------------------------
 #   Logger classes and functions
 #---------------------------------------------------------------------------
-
+# Logger日志器，提供接口、设置等级并传送给handler做后续处理
 class Logger(Filterer):
     """
     Instances of the Logger class represent a single logging channel. A
@@ -1288,6 +1294,7 @@ class Logger(Filterer):
         self.handlers = []
         self.disabled = False
 
+    # 设置最低严重级别
     def setLevel(self, level):
         """
         Set the logging level of this logger.  level must be an int or a str.
@@ -1367,6 +1374,7 @@ class Logger(Filterer):
 
     fatal = critical
 
+    # 检查level值的有效性
     def log(self, level, msg, *args, **kwargs):
         """
         Log 'msg % args' with the integer severity 'level'.
@@ -1464,6 +1472,7 @@ class Logger(Filterer):
         if (not self.disabled) and self.filter(record):
             self.callHandlers(record)
 
+    # 添加一个处理程序
     def addHandler(self, hdlr):
         """
         Add the specified handler to this logger.
@@ -1475,6 +1484,7 @@ class Logger(Filterer):
         finally:
             _releaseLock()
 
+    # 移除一个处理程序
     def removeHandler(self, hdlr):
         """
         Remove the specified handler from this logger.

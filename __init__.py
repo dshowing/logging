@@ -69,23 +69,24 @@ _startTime = time.time()
 # 查看处理期间是否应该传播异常
 raiseExceptions = True
 
-#
+# 如果不想在日志中处理线程信息，请将其设置为零
 # If you don't want threading information in the log, set this to zero
 #
 logThreads = True
 
-#
+# 如果不希望日志中包含多处理信息，请将其设置为零
 # If you don't want multiprocessing information in the log, set this to zero
 #
 logMultiprocessing = True
 
-#
+# 如果不想在日志中处理信息，请将其设置为零
 # If you don't want process information in the log, set this to zero
 #
 logProcesses = True
 
 #---------------------------------------------------------------------------
 #   Level related stuff
+#   告警等级相关
 #---------------------------------------------------------------------------
 #
 # Default levels and level names, these can be replaced with any positive set
@@ -95,6 +96,7 @@ logProcesses = True
 # at user-defined levels.
 #
 
+# 七个等级
 CRITICAL = 50
 FATAL = CRITICAL
 ERROR = 40
@@ -104,6 +106,7 @@ INFO = 20
 DEBUG = 10
 NOTSET = 0
 
+# 等级/名称对照字典
 _levelToName = {
     CRITICAL: 'CRITICAL',
     ERROR: 'ERROR',
@@ -123,6 +126,7 @@ _nameToLevel = {
     'NOTSET': NOTSET,
 }
 
+# 返回日志级别“level”的文本表示形式
 def getLevelName(level):
     """
     Return the textual representation of logging level 'level'.
@@ -146,6 +150,7 @@ def getLevelName(level):
         return result
     return "Level %s" % level
 
+# 关联等级和别名
 def addLevelName(level, levelName):
     """
     Associate 'levelName' with 'level'.
@@ -159,6 +164,7 @@ def addLevelName(level, levelName):
     finally:
         _releaseLock()
 
+# 判断sys是否属于'_getframe'属性？
 if hasattr(sys, '_getframe'):
     currentframe = lambda: sys._getframe(3)
 else: #pragma: no cover
@@ -1743,12 +1749,13 @@ Logger.manager = Manager(Logger.root)
 # Configuration classes and functions
 #---------------------------------------------------------------------------
 
+# 对日志系统进行基本配置
 def basicConfig(**kwargs):
     """
     Do basic configuration for the logging system.
 
-    This function does nothing if the root logger already has handlers
-    configured. It is a convenience method intended for use by simple scripts
+    This function does nothing if the root logger already has handlers（处理程序）
+    configured. It is a convenience method（更简单的方法） intended for use by simple scripts
     to do one-shot configuration of the logging package.
 
     The default behaviour is to create a StreamHandler which writes to
@@ -1795,6 +1802,7 @@ def basicConfig(**kwargs):
     """
     # Add thread safety in case someone mistakenly calls
     # basicConfig() from multiple threads
+    # 考虑到线程安全问题，先加一把锁
     _acquireLock()
     try:
         if len(root.handlers) == 0:

@@ -46,6 +46,7 @@ SYSLOG_TCP_PORT             = 514
 
 _MIDNIGHT = 24 * 60 * 60  # number of seconds in a day
 
+# 基础的日志轮转操作
 class BaseRotatingHandler(logging.FileHandler):
     """
     Base class for handlers that rotate log files at a certain point.
@@ -56,6 +57,7 @@ class BaseRotatingHandler(logging.FileHandler):
         """
         Use the specified filename for streamed logging
         """
+        # 初始化父类
         logging.FileHandler.__init__(self, filename, mode, encoding, delay)
         self.mode = mode
         self.encoding = encoding

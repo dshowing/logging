@@ -383,10 +383,17 @@ def makeLogRecord(dict):
     rv.__dict__.update(dict)
     return rv
 
+
+
+
+
+
 #---------------------------------------------------------------------------
 #   Formatter classes and functions
+#   格式类和相关函数
 #---------------------------------------------------------------------------
 
+# 百分比风格？
 class PercentStyle(object):
 
     default_format = '%(message)s'
@@ -427,14 +434,17 @@ class StringTemplateStyle(PercentStyle):
     def format(self, record):
         return self._tpl.substitute(**record.__dict__)
 
+# 基础格式
 BASIC_FORMAT = "%(levelname)s:%(name)s:%(message)s"
 
+# 格式风格
 _STYLES = {
     '%': (PercentStyle, BASIC_FORMAT),
     '{': (StrFormatStyle, '{levelname}:{name}:{message}'),
     '$': (StringTemplateStyle, '${levelname}:${name}:${message}'),
 }
 
+# 日志格式类，定义顺序、结构、内容等
 class Formatter(object):
     """
     Formatter instances are used to convert a LogRecord to text.
@@ -650,6 +660,7 @@ class BufferingFormatter(object):
 
 #---------------------------------------------------------------------------
 #   Filter classes and functions
+#   过滤器，细粒度的筛选
 #---------------------------------------------------------------------------
 
 class Filter(object):
@@ -801,6 +812,7 @@ class Handler(Filterer):
         return self._name
 
     def set_name(self, name):
+        # 先加锁
         _acquireLock()
         try:
             if self._name in _handlers:
@@ -809,6 +821,7 @@ class Handler(Filterer):
             if name:
                 _handlers[name] = self
         finally:
+            # 释放锁
             _releaseLock()
 
     name = property(get_name, set_name)
@@ -966,6 +979,7 @@ class Handler(Filterer):
         level = getLevelName(self.level)
         return '<%s (%s)>' % (self.__class__.__name__, level)
 
+# 输出到流，stdout
 class StreamHandler(Handler):
     """
     A handler class which writes logging records, appropriately formatted,
@@ -1025,6 +1039,7 @@ class StreamHandler(Handler):
             name += ' '
         return '<%s %s(%s)>' % (self.__class__.__name__, name, level)
 
+# 输出到磁盘文件，无线增加
 class FileHandler(StreamHandler):
     """
     A handler class which writes formatted logging records to disk files.
